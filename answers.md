@@ -756,9 +756,9 @@ In this step you will be aggregating data within a collection.
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.aggregate([{ $match: { franchise: "Star Wars" } }, { $count: "totalStarWarsMovies" }]);
+> ```
 
 ## 10.2 Mean box office takings…
 
@@ -766,9 +766,12 @@ db.collection_name.find();
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.aggregate([
+>   { $group: { _id: null, averageBoxOffice: { $avg: "$box_office" } } },
+>   { $project: { _id: 0, averageBoxOffice: { $round: ["$averageBoxOffice", 0] } } },
+> ]);
+> ```
 
 ## 10.3 Profit earnings
 
@@ -776,13 +779,12 @@ db.collection_name.find();
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
-
-Screen Shot:
-
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+> ```js
+> db.movies.aggregate([
+>   { $project: { _id: 0, title: 1, profit: { $subtract: ["$box_office", "$budget"] } } },
+>   { $sort: { profit: -1 } },
+> ]);
+> ```
 
 ## 10.4 Grouping data
 
@@ -790,9 +792,9 @@ Screen Shot:
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.aggregate([{ $group: { _id: "$franchise", numberMovies: { $sum: 1 } } }, { $sort: { numberMovies: -1 } }]);
+> ```
 
 # Step 11: Triggers
 
