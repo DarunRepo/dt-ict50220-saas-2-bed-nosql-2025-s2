@@ -17,7 +17,7 @@ created: 2024-10-23T21:09
 
 # Declaration
 
-I, THE ABOVE NAMED student, by submitting this assessment, I am acknowledging the following:
+I, Darren Twomey, by submitting this assessment, am acknowledging the following:
 
 - The submission is completely my own work.
 - I have not used AI in the formuation of the answers within this assessment.
@@ -160,8 +160,8 @@ Replace `FIELD_NAME_HERE` and `DATA_TYPE_HERE` in the table below.
 > | Writer             | writers      | String    | ideally array, but string to match import |
 > | Franchise          | franchise    | String    |                                           |
 > | Running Time       | running_time | Int32     |                                           |
-> | Budget             | budget       | Int32     |                                           |
-> | Box Office Takings | box_office   | Int32     |                                           |
+> | Budget             | budget       | Int64     |                                           |
+> | Box Office Takings | box_office   | Int64     |                                           |
 > | Actors             | actors       | String    | ideally array, but string to match import |
 > | Directors          | directors    | String    | ideally array, but string to match import |
 > | Summary            | summary      | String    |                                           |
@@ -804,11 +804,24 @@ Using the movies collection, we are now going to create triggers to provide an a
 
 - Create a trigger that monitors the movies collection for new data being added.
 
+Screen Shot:
+
+![Step 11.1 Screenshot](assets/step-11-001.png)
+![Step 11.1 Screenshot](assets/step-11-001b.png)
+
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> // If this is an "insert" event, insert the document into the other collection
+> else if (changeEvent.operationType === "insert") {
+>   //await collection.insertOne(changeEvent.fullDocument);
+>   await collection.insertOne({
+>     action: "INSERT",
+>     action_date: new Date(),
+>     new_data: changeEvent.fullDocument
+>   });
+> }
+> ```
 
 ## 11.2 Testing the insert trigger works correctly
 
@@ -816,23 +829,45 @@ db.collection_name.find();
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
-
-## 11.3 Create trigger for updated data
-
-- Create a trigger that monitors the movies collection for new data being added.
-
-Query Solution:
-
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.insertOne({
+>   title: "Jeffrey",
+>   year: 1995,
+>   writers: ["Paul Rudnick"],
+>   running_time: 92,
+>   box_office: 3500000,
+>   actors: ["Sigourney Weaver", "Patrick Stewart", "Michael T. Weiss", "Steven Weber", "Bryan Batt"],
+> });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 11.2 Screenshot](assets/step-11-002.png)
+![Step 11.2 Screenshot](assets/step-11-002b.png)
+![Step 11.2 Screenshot](assets/step-11-002c.png)
+
+## 11.3 Create trigger for updated data
+
+- Create a trigger that monitors the movies collection for data being updated.
+
+Screen Shot:
+
+![Step 11.3 Screenshot](assets/step-11-003.png)
+![Step 11.3 Screenshot](assets/step-11-003b.png)
+
+Query Solution:
+
+> ```js
+> // If this is an "update" or "replace" event, then replace the document in the other collection
+> else if (changeEvent.operationType === "update" || changeEvent.operationType === "replace") {
+>   await collection.insertOne({
+>     action: "UPDATE",
+>     action_date: new Date(),
+>     original_data: changeEvent.fullDocumentBeforeChange,
+>     new_data: changeEvent.fullDocument
+>   });
+> }
+> ```
 
 ## 11.4 Testing the update trigger works correctly
 
@@ -840,19 +875,66 @@ Screen Shot:
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.updateOne(
+>   { title: "Avatar" },
+>   {
+>     $set: {
+>       budget: 237000000,
+>       running_time: 162,
+>       box_office: 2923000000,
+>       franchise: "Avatar",
+>     },
+>   }
+> );
+> ```
 
-## 11.5 Create trigger for deleted data
+Screen Shot:
 
-- Create a trigger that monitors the movies collection for new data being added.
+![Step 11.4 Screenshot](assets/step-11-004.png)
+![Step 11.4 Screenshot](assets/step-11-004b.png)
+![Step 11.4 Screenshot](assets/step-11-004c.png)
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.updateOne(
+>   { title: "Avatar" },
+>   {
+>     $set: {
+>       actors: ["Sam Worthington", "Zoe Saldana", "Stephen Lang", "Michelle Rodriguez", "Sigourney Weaver"],
+>     },
+>   }
+> );
+> ```
+
+Screen Shot:
+
+![Step 11.4 Screenshot](assets/step-11-004d.png)
+![Step 11.4 Screenshot](assets/step-11-004e.png)
+![Step 11.4 Screenshot](assets/step-11-004f.png)
+
+## 11.5 Create trigger for deleted data
+
+- Create a trigger that monitors the movies collection for data being deleted.
+
+Screen Shot:
+
+![Step 11.5 Screenshot](assets/step-11-005.png)
+![Step 11.5 Screenshot](assets/step-11-005b.png)
+
+Query Solution:
+
+> ```js
+> // If this is a "delete" event, delete the document in the other collection
+> if (changeEvent.operationType === "delete") {
+>   await collection.insertOne({
+>     action: "DELETE",
+>     action_date: new Date(),
+>     original_data: changeEvent.fullDocumentBeforeChange,
+>   });
+> }
+> ```
 
 ## 11.6 Testing the delete trigger works correctly
 
@@ -860,9 +942,21 @@ db.collection_name.find();
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.deleteMany({ title: { $regex: /Dummy/i } });
+> ```
+
+> There aren't any movies with `Dummy` in their title, so I'm making the executive decision and purging anything with `Terminator`, which should be safe since we're not using AI for any of this. Skynet will never know.
+
+> ```js
+> db.movies.deleteMany({ title: { $regex: /Terminator/i } });
+> ```
+
+Screen Shot:
+
+![Step 11.6 Screenshot](assets/step-11-006.png)
+![Step 11.6 Screenshot](assets/step-11-006b.png)
+![Step 11.6 Screenshot](assets/step-11-006c.png)
 
 ## 11.7 Verify the log contains data…
 
@@ -870,20 +964,22 @@ db.collection_name.find();
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movie_audit.find();
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 11.7 Screenshot](assets/step-11-007.png)
+![Step 11.7 Screenshot](assets/step-11-007b.png)
+![Step 11.7 Screenshot](assets/step-11-007c.png)
 
 # Step 12: Submission
 
 What is the URL for your GitHub (or equivalent) repository for this assessment?
 
 ```text
-add url here
+https://github.com/DarunRepo/dt-ict50220-saas-2-bed-nosql-2025-s2
 ```
 
 # END
