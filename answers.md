@@ -642,30 +642,31 @@ This step requires you to remove movies from the collection.
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.deleteOne({ title: "Pee Wee Herman's Big Adventure" });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 8.1 Screenshot](assets/step-8-001.png)
 
 ## 8.2 Remove a movie by ID…
 
-Delete the movie “`Yet Another Fake Film Name`” by:
+Delete the movie “`Fictionally Fake Film`” by:
 
 - Writing a query to discover the movie ID
 - Then using the found ID to remove the movie
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.findOne({ title: "Fictionally Fake Film" });
+> db.movies.deleteOne({ _id: ObjectId("6909d8eb0c1751999a63b11f") });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 8.2 Screenshot](assets/step-8-002.png)
 
 ## 8.3 Removing multiple movies…
 
@@ -673,13 +674,13 @@ Screen Shot:
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.deleteMany({ title: { $regex: /\bFictional\b/i } });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 8.3 Screenshot](assets/step-8-003.png)
 
 # Step 9: NoSQL Indexes
 
