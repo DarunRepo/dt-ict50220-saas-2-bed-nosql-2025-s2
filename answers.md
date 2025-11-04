@@ -59,7 +59,7 @@ Example:
     ## Question Z - How many sofwarte developers does it take to change a lightbulb?
     
     > None. 
-	> It is a hardware problem.
+  > It is a hardware problem.
 ```
 
 ## Answer Requiring Code
@@ -69,13 +69,13 @@ When answering a question that requires code to be included, use a "code block",
 Example:
 
 ```markdown
-	## Question X - Title
+  ## Question X - Title
 
-	Query Solution:
+  Query Solution:
 
-	```js
-	db.collection_name.find();
-	```
+  ```js
+  db.collection_name.find();
+  ```
 ```
 
 > Note: 
@@ -202,8 +202,8 @@ Briefly outline the key features and advantages for TWO of the following NoSQL d
 > Advantages:
 >
 > Each document can have a different structure which makes it very flexible for storing complex data where each record has a varying amount of different information.
->
->
+
+
 > ### Database Type 2: Key-Value Store
 >
 > Key Features:
@@ -260,7 +260,7 @@ The situations/application of the database types must be different.
 Add the Connection String used to connect to your MongoDB Atlas instance:
 
 > ```js
-> 	mongosh "mongodb+srv://my-first-cluster.cclm2zu.mongodb.net/" --apiVersion 1 --username darren2me_db_user
+>   mongosh "mongodb+srv://my-first-cluster.cclm2zu.mongodb.net/" --apiVersion 1 --username darren2me_db_user
 > ```
 
 
@@ -269,7 +269,7 @@ Add the Connection String used to connect to your MongoDB Atlas instance:
 - Create and use a database named `saas_bed_portfolio_2025s2`.
 
 > ```js
-> 	use saas_bed_portfolio_2025s2
+>   use saas_bed_portfolio_2025s2
 > ```
 
 Did you encounter any issues when creating the database? If you did, how did you resolve them?
@@ -282,7 +282,7 @@ Did you encounter any issues when creating the database? If you did, how did you
 - Create a new collection named _movies_ and insert the provided data (full statement)
 
 > ```js
-> 	db.movies.insertOne({
+>   db.movies.insertOne({
 >     title: "Star Trek: Nemesis",
 >     year: 2002,
 >     writers: ["John Logan", "Rick Berman", "Brent Spiner"],
@@ -307,11 +307,39 @@ Screen Shot:
 
 - Add the supplied sample data into the movies collection using a **SINGLE** MongoDB Shell COMMAND in the order provided.
 
+> ```js
+>  db.movies.insertMany([
+>    {
+>      title: "Avatar",
+>      writers: ["James Cameron"],
+>      year: 2009,
+>      running_time: 162,
+>      budget: 237000000,
+>    },
+>    {
+>      title: "Fictionally Fake Film",
+>    },
+>    {
+>      title: "Little Shop of Horrors",
+>      writers: ["Howard Ashman", "Charles B. Griffith"],
+>      year: 1986,
+>      budget: 54000000,
+>    },
+>    {
+>      title: "You Cannae be Serious About a Fictional Film",
+>    },
+>  ]);
+> ```
+
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
+
+Screen Shot:
+
+![Step 4.1 Screenshot](assets/step-4-001.png)
 
 
 ## 4.2 Inserting Data
@@ -322,10 +350,45 @@ Using the `mongoimport` CLI command, import the data from one of the files to yo
 
 What was the complete command you used to perform the import of the provided sample data?
 
+> ```bash
+> mongoimport --uri 'mongodb+srv://my-first-cluster.cclm2zu.mongodb.net/saas_bed_portfolio_2025s2' \
+>    --username='darren2me_db_user' \
+>    --collection='movies' \
+>    --ignoreBlanks \
+>    --type=csv \
+>    --headerline \
+>    --file=C:/Users/20123545/Desktop/film-data-csv.csv
+> ```
+
+![Step 4.2 Screenshot](assets/step-4-002.png)
+
+> Followed by a series of mongosh commands to clean the data:
+>
+> ```js
+> db.movies.updateMany( {}, { $rename: { "running time": "running_time" } } )
+> db.movies.updateMany( {}, { $rename: { "box office": "box_office" } } )
+> db.movies.updateMany( {}, { $rename: { "writer": "writers" } } )
+> db.movies.aggregate(
+>   [
+>     { "$addFields": { 
+>       "actors": { "$split": [ "$actors", ", " ] } 
+>     }},
+>     { "$addFields": { 
+>       "directors": { "$split": [ "$directors", ", " ] } 
+>     }},
+>     { "$addFields": { 
+>       "writers": { "$split": [ "$writers", ", " ] } 
+>     }},
+>     {$out:"movies_clean"}
+>   ]
+> )
+> ```
+
+
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.movies.find();
 ```
 
 ## 4.3 Inserting Data
@@ -344,9 +407,9 @@ Add the provided additional sample data into the movies collection in the order 
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
-	
+  
 ## 5.2 Retrieve all films written by…
 
 - Get all documents with `writer` set to "`Quentin Tarantino`"
@@ -354,7 +417,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -368,9 +431,9 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
-	
+  
 ## 5.4 Retrieve films from a franchise…
 
 - Get all documents with `franchise` set to "`The Hobbit`"
@@ -378,9 +441,9 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
-	
+  
 ## 5.5 Retrieve films before/after…
 
 - Get all movies released before `1970` or after `2020`
@@ -388,9 +451,9 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
-	
+  
 Screen Shot:
 
 ![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
@@ -402,7 +465,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 
@@ -415,9 +478,9 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
-	
+  
 ## 6.2 Update document with an actor
 
 - Add the provided actors to the required films using one or more queries in the order provided...
@@ -425,7 +488,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -444,7 +507,7 @@ Performing searches on collections.
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -458,7 +521,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -472,7 +535,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -486,7 +549,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -500,7 +563,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -519,7 +582,7 @@ This step requires you to remove movies from the collection.
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -536,7 +599,7 @@ Delete the movie “`Yet Another Fake Film Name`” by:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -550,7 +613,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -569,7 +632,7 @@ Using the movies collection, create the indexes to match the following condition
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 
@@ -578,7 +641,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 - Create an index on the `franchise`, `title`, `actors`, `year` fields.
@@ -587,7 +650,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 9.2 Indexes for Full Text Search
@@ -597,7 +660,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 
@@ -608,7 +671,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -637,7 +700,7 @@ In this step you will be aggregating data within a collection.
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 10.2 Mean box office takings…
@@ -647,7 +710,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 10.3 Profit earnings
@@ -657,7 +720,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -671,7 +734,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 # Step 11: Triggers
@@ -685,7 +748,7 @@ Using the movies collection, we are now going to create triggers to provide an a
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 11.2 Testing the insert trigger works correctly
@@ -695,7 +758,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 11.3 Create trigger for updated data
@@ -705,7 +768,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
@@ -719,7 +782,7 @@ Screen Shot:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 11.5 Create trigger for deleted data
@@ -729,7 +792,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 11.6 Testing the delete trigger works correctly
@@ -739,7 +802,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 ## 11.7 Verify the log contains data…
@@ -749,7 +812,7 @@ Query Solution:
 Query Solution:
 
 ```js
-	db.collection_name.find();
+  db.collection_name.find();
 ```
 
 Screen Shot:
