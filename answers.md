@@ -164,9 +164,9 @@ Replace `FIELD_NAME_HERE` and `DATA_TYPE_HERE` in the table below.
 > | Year                | year            | Int32           | four digit year       |
 > | Writer              | writer          | String          |                       |
 > | Franchise           | franchise       | String          |                       |
-> | Running Time        | running_time    | Int32           | **min**utes           |
-> | Budget              | budget          | Number          | **$m**illions         |
-> | Box Office Takings  | box_office      | Number          | **$m**illions, **$b**illions           |
+> | Running Time        | running_time    | Int32           |                       |
+> | Budget              | budget          | Number          |                       |
+> | Box Office Takings  | box_office      | Number          |                       |
 > | Actors              | actors          | String          |                       |
 > | Directors           | directors       | String          |                       |
 > | Summary             | summary         | String          |                       |
@@ -260,7 +260,7 @@ The situations/application of the database types must be different.
 Add the Connection String used to connect to your MongoDB Atlas instance:
 
 > ```js
-> 	MONGODB_CONNECTION_STRING_HERE
+> 	mongosh "mongodb+srv://my-first-cluster.cclm2zu.mongodb.net/" --apiVersion 1 --username darren2me_db_user
 > ```
 
 
@@ -269,12 +269,12 @@ Add the Connection String used to connect to your MongoDB Atlas instance:
 - Create and use a database named `saas_bed_portfolio_2025s2`.
 
 > ```js
-> 	CREATE_AND_USE_DATABASE_IN_MONGODB_ANSWER_HERE
+> 	use saas_bed_portfolio_2025s2
 > ```
 
 Did you encounter any issues when creating the database? If you did, how did you resolve them?
 
-> ANSWER_HERE
+> No
 >
 
 ### 3.3 Collection Creation
