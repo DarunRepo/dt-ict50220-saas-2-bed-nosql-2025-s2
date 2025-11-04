@@ -692,36 +692,36 @@ Using the movies collection, create the indexes to match the following condition
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.createIndex({ title: 1 });
+> ```
 
 - Create an index on the `year` and `title ` fields.
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.createIndex({ year: 1, title: 1 });
+> ```
 
 - Create an index on the `franchise`, `title`, `actors`, `year` fields.
 - The index must be in the order year, title, actors then franchise.
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.createIndex({ year: 1, title: 1, actors: 1, franchise: 1 });
+> ```
 
 ## 9.2 Indexes for Full Text Search
 
-- Create a text index on the `title ` and `franchise` fields.
+- Create a text index on the `title ` and `actors` fields.
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.createIndex({ title: "text", actors: "text" });
+> ```
 
 ## 9.3 Verifying Execution Plans
 
@@ -729,19 +729,22 @@ db.collection_name.find();
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.explain().find({ $text: { $search: "Star" } });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 9.3 Screenshot](assets/step-9-001.png)
+![Step 9.3 Screenshot](assets/step-9-001b.png)
 
 ## 9.4 Differences in Indexes
 
 - Briefly explain the differences between an index for sorting against an index for full text searches.
 
-> ANSWER_HERE
+> An index for sorting organises data by specific field values in either ascending or descending order. This speeds up queries, especially when they are modified with .sort(), as much of the work has already been done. For example, finding all the values larger than a certain number is more efficient when they are sorted by that field.
+>
+> An index for full text searches (a $text index) identifies all of the words in the selected string fields, thus making searches for individual terms or phrases much faster. Using a sorting index on a string field may help with finding the first word, but is of no help with the following words. By isolating each individual word as an index, and sorting that, full text seraches are made much more efficient.
 
 # Step 10: Aggregation
 
