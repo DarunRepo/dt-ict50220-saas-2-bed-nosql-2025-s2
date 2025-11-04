@@ -162,13 +162,13 @@ Replace `FIELD_NAME_HERE` and `DATA_TYPE_HERE` in the table below.
 > | ID                  | _id             | ObjectId        |                       |
 > | Title               | title           | String          |                       |
 > | Year                | year            | Int32           | four digit year       |
-> | Writer              | writer          | String          |                       |
+> | Writer              | writers         | Array           |                       |
 > | Franchise           | franchise       | String          |                       |
 > | Running Time        | running_time    | Int32           |                       |
 > | Budget              | budget          | Number          |                       |
 > | Box Office Takings  | box_office      | Number          |                       |
-> | Actors              | actors          | String          |                       |
-> | Directors           | directors       | String          |                       |
+> | Actors              | actors          | Array           |                       |
+> | Directors           | directors       | Array           |                       |
 > | Summary             | summary         | String          |                       |
 > | Random              | random          | Double          |                       |
 
@@ -282,13 +282,22 @@ Did you encounter any issues when creating the database? If you did, how did you
 - Create a new collection named _movies_ and insert the provided data (full statement)
 
 > ```js
-> 	CREATE_COLLECTION_IN_MONGODB_ANSWER_HERE
+> 	db.movies.insertOne({
+>     title: "Star Trek: Nemesis",
+>     year: 2002,
+>     writers: ["John Logan", "Rick Berman", "Brent Spiner"],
+>     summary: "A clone of Picard, created by the Romulans, assassinates the Romulan Senate, assumes absolute power, and lures Picard and the Enterprise to Romulus under the false pretext of a peace overture.",
+>     franchise: "Star Trek",
+>     running_time: "117",
+>     budget: 60000000,
+>     box_office: 67300000,
+>   });
 > ```
 
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 3.3 Screenshot](assets/step-3-001.png)
 
 
 
