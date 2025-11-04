@@ -444,6 +444,36 @@ Screen Shot:
 
 ![Step 5.6 Screenshot](assets/step-5-006.png)
 
+> # Step 6: Preface
+>
+> At this point, we were instructed to update the collection with two new documents posted in a Teams chat. Those documents had the actors, directors and writers fields as arrays. In order to maintain data consistency, and to adhere to what appears to be the actual intention of those fields, I decided to apply an aggregation to the collection to convert those fields to arrays for all documents that had them.
+>
+> ```js
+> db.movies.aggregate([
+>   {
+>     $addFields: {
+>       actors: { $split: ["$actors", ", "] },
+>     },
+>   },
+>   {
+>     $addFields: {
+>       directors: { $split: ["$directors", ", "] },
+>     },
+>   },
+>   {
+>     $addFields: {
+>       writers: { $split: ["$writers", ", "] },
+>     },
+>   },
+>   { $out: "movies" },
+> ]);
+> db.movies.updateMany({ actors: null }, { $unset: { actors: "" } });
+> db.movies.updateMany({ directors: null }, { $unset: { directors: "" } });
+> db.movies.updateMany({ writers: null }, { $unset: { writers: "" } });
+> ```
+>
+> Adapted from: Goldenbaum, S. (2019, November 14). _How to convert a comma separated string field to array in mongodb_. Stack Overflow. https://stackoverflow.com/questions/58848210/how-to-convert-a-comma-separated-string-field-to-array-in-mongodb
+
 # Step 6: CRUD - Updates
 
 ## 6.1 Update document with a synopsis
@@ -452,9 +482,30 @@ Screen Shot:
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.updateOne(
+>   { title: "The Hobbit: The Desolation of Smaug" },
+>   {
+>     $set: {
+>       summary:
+>         "The dwarves, along with Bilbo Baggins and Gandalf the Grey, continue their quest to reclaim Erebor, their homeland, from Smaug. Bilbo Baggins is in possession of a mysterious and magical ring.",
+>     },
+>   }
+> );
+> db.movies.updateOne(
+>   { title: "The Hobbit: An Unexpected Journey" },
+>   {
+>     $set: {
+>       summary:
+>         "A reluctant hobbit, Bilbo Baggins, sets out to the Lonely Mountain with a spirited group of dwarves to reclaim their mountain home - and the gold within it - from the dragon Smaug.",
+>     },
+>   }
+> );
+> ```
+
+Screen Shot:
+
+![Step 6.1 Screenshot](assets/step-6-001.png)
 
 ## 6.2 Update document with an actor
 
@@ -462,13 +513,50 @@ db.collection_name.find();
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> **Note 1:** A query was run to create missing film documents, and so $set was used to add their initial actors. Subsequent updates used $push, except as mentioned in Note 2.
+>
+> ```js
+> db.movies.insertMany([{ title: "Pulp Fiction" }, { title: "Star Trek VI: The Undiscovered Country" }]);
+> ```
+
+> **Note 2:** Section 3.3 had us create a document for "Star Trek: Nemesis" with no actors. The file imported in 4.2 had a "Star Trek: Nemesis" with 4 actors. Rather than push the actors and risk getting duplicates in the imported document, we have chosen to use $set along with updateMany(). The bigger issue is that we have a duplicate film, but I have decided that that is beyond the scope of this question.
+
+> ```js
+> db.movies.updateOne({ title: "Pulp Fiction" }, { $set: { actors: "Samuel L. Jackson" } });
+> db.movies.updateOne(
+>   { title: "Star Trek VI: The Undiscovered Country" },
+>   { $set: { actors: ["William Shatner", "Leonard Nimoy", "DeForest Kelley", "James Doohan", "Christopher Plummer"] } }
+> );
+> db.movies.updateMany(
+>   { title: "Star Trek: Nemesis" },
+>   {
+>     $set: {
+>       actors: [
+>         "Patrick Stewart",
+>         "Jonathan Frakes",
+>         "Brent Spiner",
+>         "LeVar Burton",
+>         "Michael Dorn",
+>         "Gates McFadden",
+>         "Marina Sirtis",
+>       ],
+>     },
+>   }
+> );
+> db.movies.updateOne(
+>   { title: "Star Trek VI: The Undiscovered Country" },
+>   {
+>     $push: {
+>       actors: { $each: ["Walter Koenig", "Nichelle Nichols", "George Takei", "Kim Cattrall", "David Warner"] },
+>     },
+>   }
+> );
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 6.2 Screenshot](assets/step-6-002.png)
+![Step 6.2 Screenshot](assets/step-6-002b.png)
 
 # Step 7: CRUD – Searches
 
