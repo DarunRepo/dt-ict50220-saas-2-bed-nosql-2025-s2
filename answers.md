@@ -568,69 +568,69 @@ Performing searches on collections.
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.find({ title: /^L/ });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 7.1 Screenshot](assets/step-7-001.png)
 
-## 7.2 Searching for synopses with …
+## 7.2 Searching for summaries with …
 
-- Find all movies that have a `synopsis` that contains the word "`space`"
+- Find all movies that have a `summary` that contains the word "`space`"
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.find({ summary: /space/ });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 7.2 Screenshot](assets/step-7-002.png)
 
-## 7.3 Searching for synopses with… and not …
+## 7.3 Searching for summaries with… and not …
 
-- Find all movies that have a `synopsis` that contains the word "`Bilbo`" and not the word "`Gandalf`"
+- Find all movies that have a `summary` that contains the word "`Captain`" and not the word "`Pike`"
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.find({ summary: { $regex: /Captain/, $not: /Pike/ } });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 7.3 Screenshot](assets/step-7-003.png)
 
-## 7.4 Searching for synopses with … or …
+## 7.4 Searching for summaries with … or …
 
-- Find all movies that have a `synopsis` that contains the word "`Klingon`" or "`Romulan`"
+- Find all movies that have a `summary` that contains the word "`London`" or "`Brooklyn`"
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.find({ $or: [{ summary: /London/ }, { summary: /Brooklyn/ }] });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 7.4 Screenshot](assets/step-7-004.png)
 
-## 7.5 Searching for synopses with … and …
+## 7.5 Searching for summaries with … and …
 
-- Find all movies that have a synopsis that contains the words "`gold`" and "`dragon`"
+- Find all movies that have a summary that contains the words "`team`" and "`search`"
 
 Query Solution:
 
-```js
-db.collection_name.find();
-```
+> ```js
+> db.movies.find({ $and: [{ summary: /team/ }, { summary: /search/ }] });
+> ```
 
 Screen Shot:
 
-![Step 3.3 Screenshot](assets/SCREENSHOT_FILENAME_HERE.png)
+![Step 7.5 Screenshot](assets/step-7-005.png)
 
 # Step 8: CRUD - Deletions
 
