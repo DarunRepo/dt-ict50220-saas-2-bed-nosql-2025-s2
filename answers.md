@@ -123,15 +123,15 @@ This step provides a checklist for yout to ensure you have set up the assessment
 
 Put an X between each of the pairs of `[ ]` when you have completed the task:
 
-> - [ ] Create a new **empty** & **private** repository on GitHub (or the equivalent).
-> - [ ] Repository is named `xxx-ICT50220-SaaS-2-BED-NoSQL` replacing `xxx` with your initials.
-> - [ ] Cloned the repository to your local PC.
-> - [ ] Created a new folder called `assets` inside your cloned repository.
-> - [ ] Created an empty `ReadMe.md`.
-> - [ ] Created an empty `.gitignore` file in the assets folder.
+> - [X] Create a new **empty** & **private** repository on GitHub (or the equivalent).
+> - [X] Repository is named `xxx-ICT50220-SaaS-2-BED-NoSQL` replacing `xxx` with your initials.
+> - [X] Cloned the repository to your local PC.
+> - [X] Created a new folder called `assets` inside your cloned repository.
+> - [X] Created an empty `ReadMe.md`.
+> - [X] Created an empty `.gitignore` file in the assets folder.
 > - [ ] Downloaded the provided `sample.gitignore` file, moved it into the repository folder, and renamed it to `.gitignore`.
-> - [ ] Placed a copy of the assessment's Word document into the repository folder.
-> - [ ] Added all the new files and folders to the repository, commited them to version control, and pushed them to your private remote repository.
+> - [X] Placed a copy of the assessment's Word document into the repository folder.
+> - [X] Added all the new files and folders to the repository, commited them to version control, and pushed them to your private remote repository.
 
 ---
 
@@ -143,15 +143,11 @@ This step verifies you understand concepts that includes, but is not limited to 
 
 What naming convention will you use for the database, collections and fields used in the assessment scenario?
 
-> ANSWER_HERE
->
->
+> Snake case.
 
 Why did you choose this naming convention?
 
-> ANSWER_HERE
-> 
->
+> Hyphens can't be used, so lowercase and underscores (also known as snake case) is the preferred naming format.
 
 ## 2.2 Identify Data Types
 
@@ -163,24 +159,28 @@ Replace `FIELD_NAME_HERE` and `DATA_TYPE_HERE` in the table below.
 
 > | Item                | Field Name      | Data Type       | Notes                 |
 > |---------------------|-----------------|-----------------|-----------------------|
-> | ID                  | FIELD_NAME_HERE | DATA_TYPE_HERE  |                       |
-> | Title               | FIELD_NAME_HERE | DATA_TYPE_HERE  | four digit year       |
-> | Year                | FIELD_NAME_HERE | DATA_TYPE_HERE  |                       |
-> | Writer              | FIELD_NAME_HERE | DATA_TYPE_HERE  |                       |
-> | Summary             | FIELD_NAME_HERE | DATA_TYPE_HERE  |                       |
-> | Franchise           | FIELD_NAME_HERE | DATA_TYPE_HERE  |                       |
-> | Running Time        | FIELD_NAME_HERE | DATA_TYPE_HERE  | **min**utes               |
-> | Budget              | FIELD_NAME_HERE | DATA_TYPE_HERE  | **$m**illions            |
-> | Box Office Takings  | FIELD_NAME_HERE | DATA_TYPE_HERE  | **$m**illions, **$b**illions           |
+> | ID                  | _id             | ObjectId        |                       |
+> | Title               | title           | String          |                       |
+> | Year                | year            | Int32           | four digit year       |
+> | Writer              | writer          | String          |                       |
+> | Franchise           | franchise       | String          |                       |
+> | Running Time        | running_time    | Int32           | **min**utes           |
+> | Budget              | budget          | Number          | **$m**illions         |
+> | Box Office Takings  | box_office      | Number          | **$m**illions, **$b**illions           |
+> | Actors              | actors          | String          |                       |
+> | Directors           | directors       | String          |                       |
+> | Summary             | summary         | String          |                       |
+> | Random              | random          | Double          |                       |
 
 
 ## 2.3 Defining Terms
 
 Briefly explain what is meant by the terms database, collection, document and field in terms of MongoDB.
 
-> ANSWER_HERE
->
-> 
+> In MongoDB, a **database** is the container for one or more sets of related information, often grouped for the purposes of a single project.
+> A **collection** is what would be a table in a RBMS, a group of objects that are all of the same type of object, but each with slightly different attributes.
+> A **document** is what would be a row in a RDMS, an individual member of the collection with its own set of attributes.
+> A **field** is what would be a cell in a RDMS, a unit of data representing a single attribute of the document. 
 
 ## 2.4 NoSQL Database Types
 
@@ -191,30 +191,47 @@ Briefly outline the key features and advantages for TWO of the following NoSQL d
 - Wide-Column Oriented Database
 - Graph Database
 
-> ### Database Type 1: NAME_HERE
+> ### Database Type 1: Document Database
 >
->  ANSWER_HERE
-
-
-> ### Database Type 2: NAME_HERE
+> Key Features:
 >
-> ANSWER_HERE 
+> - They offer flexible schemas where each document can have its own structure
+> - They allow for hierarchical data which is great for nested data structures
+> - The data can be queried using powerful query languages
+>
+> Advantages:
+>
+> Each document can have a different structure which makes it very flexible for storing complex data where each record has a varying amount of different information.
+>
+>
+> ### Database Type 2: Key-Value Store
+>
+> Key Features:
+>
+> - They are simple and fast, making them great for quick lookups
+> - They are very scalable allowing for easy distribution across multiple servers
+> - They have no fixed schema which makes them flexible enough to store any type of data
+>
+> Advantages:
+>
+> In a Key-Value Database, each piece of data is stored as a key-value pair. Having a single search key means they can be very fast for read and write operations and are particular useful as lookup tables.
+
 
 
 ## 2.5 NoSQL Database Systems
 
-Provide one example product (commercial or open source) for each of your NoSQL NoSQL Database types.
+Provide one example product (commercial or open source) for each of your NoSQL Database types.
 
 You may **NOT** include _MongoDB_ which is an example of a _Document Database_.
 
-> ### Database Type 1: NAME_HERE
+> ### Database Type 1: Document Database
 >
-> ANSWER_HERE
+> CouchDB
 
 
-> ### Database Type 2: NAME_HERE
+> ### Database Type 2: Key-Value Store
 >
-> ANSWER_HERE
+> Redis
 
 
 ## 2.6 NoSQL Database Uses
@@ -223,14 +240,14 @@ Provide an example for each of your NoSQL database of the situation when your da
 
 The situations/application of the database types must be different.
 
-> ### Database Type 1: NAME_HERE
+> ### Database Type 1: Document Database
 >
-> ANSWER_HERE
+> When storing a patient's medical records, each record might have significantly different content. One might contain X-Ray results, while another contains blood work. The flexible schema of a document database allows each document to have whatever records it needs without impacting other records.
 
 
-> ### Database Type 2: NAME_HERE
+> ### Database Type 2: Key-Value Store
 >
-> ANSWER_HERE
+> Running a search query against the sum of human knowledge that is the internet can be a computationally expensive process. If a query and its results are stored as a key-value pair, then future duplicate queries can quickly make use of the stored (cached) information. 
 
 
 
